@@ -5,7 +5,6 @@
     "dockerfilePath": "/packages/api/dockerfile"
   },
   "deploy": {
-    "startCommand": "npm run start",
     "restartPolicyType": "ON_FAILURE",
     "healthcheckPath": "/api/healtcheck"
   }
