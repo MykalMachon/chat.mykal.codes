@@ -1,3 +1,7 @@
+# tweaked models
+docs.index
+faiss_store.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

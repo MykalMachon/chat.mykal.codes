@@ -5,15 +5,14 @@ from flask import Flask
 from botapi.routes.meta import meta
 from botapi.routes.chat import chat
 
+# import llm 
+from botapi.llm import get_model
+
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')
-
-    # TODO: fetch all post data from https://mykal.codes/feeds/main.json
-    # TODO: parse this data into LangChain format
-    # TODO: initialize a model with ChatGPT3 and the vectorized data
-    # TODO: set this instance as a global variable in the flask app context
+    app.config['MODEL'] = get_model()
 
     # register routes
     app.register_blueprint(meta)
