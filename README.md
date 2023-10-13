@@ -1,7 +1,7 @@
 # chat.mykal.codes
 
-> ![WARNING]
-> This is still a WIP! Please proceed with caution
+> [!WARNING]
+> This is still a WIP! Please proceed with caution.
 
 an LLM chatbot that ingests my blog posts, and lets you ask a digital me questions.
 
