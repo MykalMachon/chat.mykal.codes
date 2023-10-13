@@ -8,7 +8,7 @@ from langchain.embeddings import OpenAIEmbeddings
 import pickle
 import requests
 
-MODEL_FOLDER = Path("./")
+MODEL_FOLDER = Path("/srv/chat")
 
 def get_model():
     """Ingests data from the main feed and loads it into the model"""
