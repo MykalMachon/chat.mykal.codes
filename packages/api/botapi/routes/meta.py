@@ -2,7 +2,7 @@ from flask import Blueprint, Response
 
 meta = Blueprint('meta', __name__, url_prefix='/api/meta')
 
-@meta.route('/health', methods=['GET'])
+@meta.route('/healthcheck', methods=['GET'])
 def get_health():
     """
     Return a 200 OK status to indicate the API is up and running.

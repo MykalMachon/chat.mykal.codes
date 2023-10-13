@@ -6,6 +6,6 @@
   },
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
-    "healthcheckPath": "/api/healtcheck"
+    "healthcheckPath": "/api/meta/healthcheck"
   }
 }
