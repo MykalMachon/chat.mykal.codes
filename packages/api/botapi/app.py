@@ -1,5 +1,6 @@
 from os import getenv
 from flask import Flask
+from flask_cores import CORS
 
 # import routes
 from botapi.routes.meta import meta
@@ -13,6 +14,12 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = getenv('SECRET_KEY')
     app.config['MODEL'] = get_model()
+
+    # set cors for routes / blueprints
+    CORS(app, resources={
+        r"/api/meta/*": {"origins": "*"},
+        r"/api/chat/*": {"origins": "*"}
+    })
 
     # register routes
     app.register_blueprint(meta)
