@@ -1,6 +1,6 @@
 from os import getenv
 from flask import Flask
-from flask_cores import CORS
+from flask_cors import CORS
 
 # import routes
 from botapi.routes.meta import meta
