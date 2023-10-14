@@ -62,10 +62,7 @@
         {answer.answer}
       </p>
       <p>
-        {#if answer.sources}
-          sources:
-          {answer.sources}
-        {/if}
+        {answer.sources || 'No sources found'}
       </p>
     {/if}
   </main>
@@ -124,6 +121,7 @@
     flex-direction: column;
     & p {
       font-size: var(--font-size-3);
+			line-height: 1.5;
     }
   }
 
