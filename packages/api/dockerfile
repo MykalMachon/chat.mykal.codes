@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 # copy source code
 COPY . .
 
-ENTRYPOINT gunicorn --workers=$WORKERS --bind=0.0.0.0:$PORT 'botapi.app:create_app()' 
+ENTRYPOINT gunicorn --workers=$WORKERS --bind=[::]:$PORT 'botapi.app:create_app()' 
