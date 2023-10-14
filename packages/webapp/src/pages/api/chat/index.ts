@@ -13,6 +13,8 @@ export const GET: APIRoute = async ({ url }) => {
 
   // fetch the response from the backend
   const API_URL = import.meta.env.CHAT_API_URL;
+  const api_url = `${API_URL}/api/chat?q=${q}`;
+  console.log(`calling ${api_url}`);
   const res = await fetch(`${API_URL}/api/chat?q=${q}`);
   const data = await res.json();
 
