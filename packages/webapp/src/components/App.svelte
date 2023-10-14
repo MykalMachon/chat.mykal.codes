@@ -1,5 +1,5 @@
 <script>
-	const API_BASE = "https://chat-api-production-cb57.up.railway.app/api/chat/"
+	const API_BASE = "/api/chat"
 	
 	let question = ""
 	let answer = null;
@@ -15,10 +15,9 @@
 
 		// construct URL params 
 		const params = new URLSearchParams(formData)
-		const apiUrl = new URL(`${API_BASE}?${params.toString()}`)
 
 		// call the API 
-		const res = await fetch(apiUrl);
+		const res = await fetch(`${API_BASE}?${params.toString()}`);
 		const data = await res.json();
 
 		answer = data;
@@ -30,7 +29,15 @@
 
 <section>
 	{#if !answer}
-		<p>no results</p>
+		{#if loading}
+			<p>
+				loading...
+			</p>
+		{:else}
+			<p>
+				Ask a question!
+			</p>
+		{/if}
 	{:else}
 		<p>
 			{answer.answer}
