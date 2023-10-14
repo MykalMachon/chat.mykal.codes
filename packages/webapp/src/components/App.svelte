@@ -18,7 +18,7 @@
 
   const submitQuestionForm = async (e) => {
     e.preventDefault();
-		answer = null;
+    answer = null;
     loading = true;
 
     try {
@@ -45,52 +45,54 @@
   };
 </script>
 
-<nav>
-  <h1>Mykal.ai</h1>
-</nav>
+<div class="site-container">
+  <nav>
+    <h1>Mykal.ai</h1>
+  </nav>
 
-<main>
-  {#if !answer}
-    {#if loading}
-      <p>loading...</p>
-    {:else}
-      <p>Ask a question!</p>
-    {/if}
-  {:else}
-    <p>
-      {answer.answer}
-    </p>
-    <p>
-      {#if answer.sources}
-        sources:
-        {answer.sources}
+  <main>
+    {#if !answer}
+      {#if loading}
+        <p>loading...</p>
+      {:else}
+        <p>Ask a question!</p>
       {/if}
-    </p>
-  {/if}
-</main>
+    {:else}
+      <p>
+        {answer.answer}
+      </p>
+      <p>
+        {#if answer.sources}
+          sources:
+          {answer.sources}
+        {/if}
+      </p>
+    {/if}
+  </main>
 
-<section class="chatform">
-  <form
-    bind:this={formEl}
-    on:submit={submitQuestionForm}
-    method="GET"
-    target="https://chat-api-production-cb57.up.railway.app/api/chat/"
-  >
-    <textarea
-      on:keydown={handleEnterKey}
-      id="q"
-      name="q"
-      bind:value={question}
-    />
-    <button
-      class="icon"
-      type="submit"
-      disabled={question.length <= 0 || loading}
+  <section class="chatform">
+    <form
+      bind:this={formEl}
+      on:submit={submitQuestionForm}
+      method="GET"
+      target="https://chat-api-production-cb57.up.railway.app/api/chat/"
     >
-      <IoMdSend />
-    </button>
-  </form>
-</section>
+      <textarea
+        on:keydown={handleEnterKey}
+        id="q"
+        name="q"
+        bind:value={question}
+      />
+      <button
+        class="icon"
+        type="submit"
+        disabled={question.length <= 0 || loading}
+      >
+        <IoMdSend />
+      </button>
+    </form>
+  </section>
+</div>
 
 <style>
   @import 'https://unpkg.com/open-props';
@@ -105,22 +107,34 @@
     margin: 0;
   }
 
-	main, nav {
+	nav {
+		border-bottom: 1px solid var(--gray-3);
+		padding: var(--size-1) var(--size-2);
+		display: grid;
+		place-items: center;
+	}
+
+  main {
     bottom: var(--size-3);
     padding: var(--size-3) var(--size-2);
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-		flex-direction: column;
-	} 
+    justify-content: flex-start;
+    flex-direction: column;
+    & p {
+      font-size: var(--font-size-3);
+    }
+  }
 
-	p {
-		font-size: var(--font-size-md);
-	}
+  .site-container {
+		height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
 
   section.chatform {
-    position: absolute;
+    position: sticky;
     bottom: var(--size-3);
     padding: var(--size-3);
     width: 100%;
@@ -138,7 +152,7 @@
     padding: var(--size-2);
     max-width: 800px;
     width: 100%;
-		box-shadow: var(--shadow-2);
+    box-shadow: var(--shadow-2);
     &:focus-within {
       border-color: var(--blue-3);
       outline: 2px solid var(--blue-4);
@@ -148,7 +162,7 @@
 
   :global(input, select, textarea) {
     padding: var(--size-2);
-    font-size: var(--font-size-1);
+    font-size: var(--font-size-2);
     border: none;
     resize: none;
     &:focus {
