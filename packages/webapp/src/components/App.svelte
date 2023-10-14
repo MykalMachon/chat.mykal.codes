@@ -18,6 +18,7 @@
 
   const submitQuestionForm = async (e) => {
     e.preventDefault();
+		answer = null;
     loading = true;
 
     try {
@@ -106,11 +107,12 @@
 
 	main, nav {
     bottom: var(--size-3);
-    padding: var(--size-3);
+    padding: var(--size-3) var(--size-2);
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+		flex-direction: column;
 	} 
 
 	p {
@@ -155,7 +157,7 @@
   }
 
   :global(textarea) {
-    min-height: 100px;
+    min-height: 4rem;
   }
   :global(button.icon) {
     width: 40px;
