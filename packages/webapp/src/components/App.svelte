@@ -87,7 +87,7 @@
       {/each}
       {#if loading}
         <div in:fly={{ y: 12, duration: 450 }} class="chat-message answer">
-          let me think about that...
+          <p>Let me think about that...🤔</p>
         </div>
       {/if}
     </div>
