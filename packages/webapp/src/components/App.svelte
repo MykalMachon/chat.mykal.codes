@@ -3,23 +3,28 @@
   const API_BASE = '/api/chat';
 
   let formEl = null;
-  let question = '';
+  let currQuestion = '';
+  let thread = [];
   let answer = null;
   let loading = false;
 
   const handleEnterKey = (e) => {
-    console.log(e.key);
     if (e.key == 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      console.log('submitting form');
       formEl.dispatchEvent(new Event('submit'));
     }
   };
 
   const submitQuestionForm = async (e) => {
     e.preventDefault();
-    answer = null;
+    
     loading = true;
+
+    const newQuestion = {
+      type: 'question',
+      text: currQuestion, 
+    }
+    thread = [...thread, newQuestion];
 
     try {
       // get data from form as object
@@ -35,12 +40,21 @@
 
       if (res.status !== 200) throw new Error(data.message);
 
-      answer = data;
+      let thread = [
+        ...thread,
+        { 
+          type: 'answer',
+          text: `${data.answer} ${data?.sources || 'no sources for this data'}`
+        }
+      ]
     } catch (err) {
       console.log('error', err);
-      answer = { answer: err, sources: [] };
+      thread = [...thread, { 
+        type: 'error',
+        text: `something went wrong when asking your question: ${err}`
+      }]
     }
-    question = '';
+    currQuestion = '';
     loading = false;
   };
 </script>
@@ -51,19 +65,15 @@
   </nav>
 
   <main>
-    {#if !answer}
-      {#if loading}
-        <p>loading...</p>
-      {:else}
-        <p>Ask a question!</p>
-      {/if}
-    {:else}
-      <p>
-        {answer.answer}
-      </p>
-      <p>
-        {answer.sources || 'No sources found'}
-      </p>
+    <div class="chat-message__container">
+      {#each thread as {type, text}, i}
+        <div class={`chat-message ${type}`}>
+          {text}
+        </div>
+      {/each}
+    </div>
+    {#if loading}
+      <p>loading...</p>
     {/if}
   </main>
 
@@ -78,12 +88,13 @@
         on:keydown={handleEnterKey}
         id="q"
         name="q"
-        bind:value={question}
+        placeholder="what do you think about docker?"
+        bind:value={currQuestion}
       />
       <button
         class="icon"
         type="submit"
-        disabled={question.length <= 0 || loading}
+        disabled={currQuestion.length <= 0 || loading}
       >
         <IoMdSend />
       </button>
@@ -102,33 +113,92 @@
   :global(html, body) {
     padding: 0;
     margin: 0;
+    background: var(--gray-2);
   }
 
-	nav {
-		border-bottom: 1px solid var(--gray-3);
-		padding: var(--size-1) var(--size-2);
-		display: grid;
-		place-items: center;
-	}
+  .site-container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  nav {
+    border-bottom: 1px solid var(--gray-4);
+    padding: var(--size-1) var(--size-2);
+    display: grid;
+    place-items: center;
+    background: var(--gray-1);
+  }
 
   main {
     bottom: var(--size-3);
     padding: var(--size-3) var(--size-2);
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    flex-direction: column;
-    & p {
-      font-size: var(--font-size-3);
-			line-height: 1.5;
+
+    & .chat-message__container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      width: 100%;
+      max-width: 800px;
+      gap: var(--size-3);
     }
   }
 
-  .site-container {
-		height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+  div.chat-message {
+    position: relative;
+    grid-column: 2/4;
+    padding: var(--size-2) var(--size-3);
+    background: white;
+    border-radius: var(--radius-round);
+
+    & p {
+      margin: 0px;
+      font-size: var(--font-size-3);
+      line-height: 1.5;
+    }
+
+    &.question {
+      background: var(--gradient-17);
+      color: white;
+      border-bottom-right-radius: 0px;
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: 0em;
+        right: -1em;
+        width: 1em;
+        height: 1em;
+        border-bottom-right-radius: 8rem;
+        background: radial-gradient(circle at top right,rgba(0,0,0,0) 0,rgba(0,0,0,0) 1em,blue 1em);
+      }
+    }
+
+    &:is(.answer, .error) {
+      grid-column: 1/3;
+      border-bottom-left-radius: 0px;
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: 0em;
+        left: -1em;
+        width: 1em;
+        height: 1em;
+        border-bottom-left-radius: 8rem;
+        background: radial-gradient(circle at top left,rgba(0,0,0,0) 0,rgba(0,0,0,0) 1em,white 1em);
+      }
+    }
+
+    &.error {
+      background: var(--red-8);
+      color: var(--red-0);
+      &:after {
+        background: radial-gradient(circle at top left,rgba(0,0,0,0) 0,rgba(0,0,0,0) 1em,var(--red-8) 1em);
+      }
+    }
   }
 
   section.chatform {
@@ -150,6 +220,7 @@
     padding: var(--size-2);
     max-width: 800px;
     width: 100%;
+    background: white;
     box-shadow: var(--shadow-2);
     &:focus-within {
       border-color: var(--blue-3);
@@ -179,12 +250,12 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-round);
-    background: var(--gradient-2);
+    background: var(--gradient-17);
     border: none;
     color: white;
     transition: all 0.3s var(--ease-out-2);
     &:disabled {
-      opacity: 0.6;
+      filter: grayscale(1) opacity(0.2);
     }
   }
 </style>
