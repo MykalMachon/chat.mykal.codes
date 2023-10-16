@@ -7,6 +7,15 @@
   let thread = [];
   let loading = false;
 
+  // TODO: there's probably a better way to do this...
+  $: if (thread.length > 0) {
+    setTimeout(() => {
+      let chatMessageEls = document.querySelectorAll('.chat-message');
+      let newChatEl = chatMessageEls[chatMessageEls.length - 1];
+      newChatEl.scrollIntoView({ behavior: 'smooth' });
+    }, 10);
+  }
+
   const handleEnterKey = (e) => {
     if (e.key == 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -131,15 +140,15 @@
 
   @media screen and (prefers-color-scheme: dark) {
     :global(:root) {
-    --paper-1: var(--gray-12);
-    --paper-2: var(--gray-11);
-    --paper-3: var(--gray-10);
-    --paper-4: var(--gray-9);
+      --paper-1: var(--gray-12);
+      --paper-2: var(--gray-11);
+      --paper-3: var(--gray-10);
+      --paper-4: var(--gray-9);
 
-    --ink-1: var(--gray-0);
-    --ink-2: var(--gray-1);
-    --ink-3: var(--gray-3);
-    --ink-4: var(--gray-4);
+      --ink-1: var(--gray-0);
+      --ink-2: var(--gray-1);
+      --ink-3: var(--gray-3);
+      --ink-4: var(--gray-4);
     }
   }
 
@@ -176,8 +185,6 @@
       letter-spacing: var(--size-1);
     }
   }
-
-
 
   main {
     bottom: var(--size-3);
