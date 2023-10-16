@@ -1,27 +1,32 @@
 <script>
-  import IoMdSend from 'svelte-icons/io/IoMdSend.svelte';
-  import { fly } from 'svelte/transition';
-  import WelcomeWidget from './WelcomeWidget.svelte';
-  const API_BASE = '/api/chat';
+  import IoMdSend from "svelte-icons/io/IoMdSend.svelte";
+  import IoLogoGithub from "svelte-icons/io/IoLogoGithub.svelte";
+  import IoIosJournal from "svelte-icons/io/IoIosJournal.svelte";
+
+  import { fly } from "svelte/transition";
+
+  import WelcomeWidget from "./WelcomeWidget.svelte";
+
+  const API_BASE = "/api/chat";
 
   let formEl = null;
-  let currQuestion = '';
+  let currQuestion = "";
   let thread = [];
   let loading = false;
 
   // TODO: there's probably a better way to do this...
   $: if (thread.length > 0) {
     setTimeout(() => {
-      let chatMessageEls = document.querySelectorAll('.chat-message');
+      let chatMessageEls = document.querySelectorAll(".chat-message");
       let newChatEl = chatMessageEls[chatMessageEls.length - 1];
-      newChatEl.scrollIntoView({ behavior: 'smooth' });
+      newChatEl.scrollIntoView({ behavior: "smooth" });
     }, 10);
   }
 
   const handleEnterKey = (e) => {
-    if (e.key == 'Enter' && !e.shiftKey) {
+    if (e.key == "Enter" && !e.shiftKey) {
       e.preventDefault();
-      formEl.dispatchEvent(new Event('submit'));
+      formEl.dispatchEvent(new Event("submit"));
     }
   };
 
@@ -30,12 +35,12 @@
     loading = true;
 
     const newQuestion = {
-      type: 'question',
+      type: "question",
       text: currQuestion,
     };
     thread = [...thread, newQuestion];
 
-    currQuestion = '';
+    currQuestion = "";
     try {
       // get data from form as object
       const form = new FormData(e.target);
@@ -53,28 +58,58 @@
       thread = [
         ...thread,
         {
-          type: 'answer',
-          text: `${data.answer} ${data?.sources || 'no sources for this data'}`,
+          type: "answer",
+          text: `${data.answer} ${data?.sources || "no sources for this data"}`,
         },
       ];
     } catch (err) {
-      console.log('error', err);
+      console.log("error", err);
       thread = [
         ...thread,
         {
-          type: 'error',
+          type: "error",
           text: `something went wrong when asking your question: ${err}`,
         },
       ];
     }
-    currQuestion = '';
+    currQuestion = "";
     loading = false;
   };
 </script>
 
 <div class="site-container">
   <nav>
-    <h1>Mykal.ai</h1>
+    <div class="nav__container">
+      <div class="nav__container__item icon">
+        {#if thread.length > 0}
+          <a
+            in:fly={{
+              x: -12,
+              duration: 450,
+            }}
+            href="https://mykal.codes/garden/"
+            title="view source content"
+          >
+            <IoIosJournal />
+          </a>
+        {/if}
+      </div>
+      <div class="nav__container__item"><h1>Mykal.ai</h1></div>
+      <div class="nav__container__item icon">
+        {#if thread.length > 0}
+          <a
+            in:fly={{
+              x: 12,
+              duration: 450,
+            }}
+            href="https://github.com/mykalmachon/chat.mykal.codes/"
+            title="view project source code"
+          >
+            <IoLogoGithub />
+          </a>
+        {/if}
+      </div>
+    </div>
   </nav>
 
   <main>
@@ -138,7 +173,7 @@
 </div>
 
 <style>
-  @import 'https://unpkg.com/open-props';
+  @import "https://unpkg.com/open-props";
 
   :global(:root) {
     --font-size-sm: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
@@ -208,10 +243,11 @@
   }
 
   nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-bottom: 1px solid var(--paper-4);
     padding: var(--size-1) var(--size-2);
-    display: grid;
-    place-items: center;
     background: var(--paper-2);
 
     & h1 {
@@ -220,6 +256,33 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: var(--size-1);
+    }
+
+    & .nav__container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    & .icon {
+      width: 40px;
+      height: 40px;
+      padding: var(--size-2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      & a {
+        color: var(--ink-1);
+        opacity: 0.5;
+        transition: opacity 0.3s ease-in-out;
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
 
@@ -258,7 +321,7 @@
       color: white;
       border-bottom-right-radius: 0px;
       &:after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0em;
         right: -1em;
@@ -280,7 +343,7 @@
       background: var(--paper-4);
       color: var(--ink-1);
       &:after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: 0em;
         left: -1em;
