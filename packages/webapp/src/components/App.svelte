@@ -5,7 +5,6 @@
   let formEl = null;
   let currQuestion = '';
   let thread = [];
-  let answer = null;
   let loading = false;
 
   const handleEnterKey = (e) => {
@@ -40,7 +39,7 @@
 
       if (res.status !== 200) throw new Error(data.message);
 
-      let thread = [
+      thread = [
         ...thread,
         { 
           type: 'answer',
@@ -73,7 +72,9 @@
       {/each}
     </div>
     {#if loading}
-      <p>loading...</p>
+      <div class="chat-message answer">
+        let me think about that...
+      </div>
     {/if}
   </main>
 
