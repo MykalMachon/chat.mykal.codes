@@ -70,7 +70,9 @@
     <div class="chat-message__container">
       {#each thread as { type, text }, i}
         <div class={`chat-message ${type}`}>
-          {text}
+          <p>
+            {text}
+          </p>
         </div>
       {/each}
     </div>
