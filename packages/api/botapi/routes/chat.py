@@ -6,6 +6,7 @@ chat = Blueprint('chat', __name__, url_prefix='/api/chat')
 def get_home():
     args = request.args 
     question = args.get('q')
+    current_app.logger.info(f"New chat request with prompt ${question}")
 
     if not question:
         return {"message": "No question provided"}, 400
