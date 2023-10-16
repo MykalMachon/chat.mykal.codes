@@ -1,6 +1,7 @@
 <script>
   import IoMdSend from 'svelte-icons/io/IoMdSend.svelte';
   import { fly } from 'svelte/transition';
+  import WelcomeWidget from './WelcomeWidget.svelte';
   const API_BASE = '/api/chat';
 
   let formEl = null;
@@ -26,7 +27,6 @@
 
   const submitQuestionForm = async (e) => {
     e.preventDefault();
-
     loading = true;
 
     const newQuestion = {
@@ -35,6 +35,7 @@
     };
     thread = [...thread, newQuestion];
 
+    currQuestion = '';
     try {
       // get data from form as object
       const form = new FormData(e.target);
@@ -77,16 +78,34 @@
   </nav>
 
   <main>
+    {#if thread.length == 0}
+      <WelcomeWidget />
+    {/if}
+
     <div class="chat-message__container">
       {#each thread as { type, text }, i}
-        <div in:fly={{ y: 12, duration: 450 }} class={`chat-message ${type}`}>
+        <div
+          in:fly={{
+            y: 12,
+            duration: 450,
+            delay: i === 0 || i === 1 ? 226 : 0,
+          }}
+          class={`chat-message ${type}`}
+        >
           <p>
             {text}
           </p>
         </div>
       {/each}
       {#if loading}
-        <div in:fly={{ y: 12, duration: 450 }} class="chat-message answer">
+        <div
+          in:fly={{
+            y: 12,
+            duration: 450,
+            delay: thread.length === 1 ? 226 : 0,
+          }}
+          class="chat-message answer"
+        >
           <p>Let me think about that...🤔</p>
         </div>
       {/if}
@@ -139,6 +158,11 @@
     --ink-2: var(--gray-10);
     --ink-3: var(--gray-9);
     --ink-4: var(--gray-8);
+
+    --acc-1: var(--blue-12);
+    --acc-2: var(--blue-10);
+    --acc-3: var(--blue-8);
+    --acc-4: var(--blue-6);
   }
 
   @media screen and (prefers-color-scheme: dark) {
@@ -152,6 +176,11 @@
       --ink-2: var(--gray-1);
       --ink-3: var(--gray-3);
       --ink-4: var(--gray-4);
+
+      --acc-1: var(--blue-1);
+      --acc-2: var(--blue-3);
+      --acc-3: var(--blue-6);
+      --acc-4: var(--blue-8);
     }
   }
 
@@ -165,6 +194,11 @@
     margin: 0;
     background: var(--paper-3);
     color: var(--ink-1);
+  }
+
+  :global(p, li) {
+    font-size: var(--font-size-base);
+    line-height: 1.5;
   }
 
   .site-container {
@@ -217,8 +251,6 @@
 
     & p {
       margin: 0px;
-      font-size: var(--font-size-base);
-      line-height: 1.5;
     }
 
     &.question {
