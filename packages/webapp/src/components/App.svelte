@@ -1,5 +1,6 @@
 <script>
   import IoMdSend from 'svelte-icons/io/IoMdSend.svelte';
+  import { fly } from 'svelte/transition';
   const API_BASE = '/api/chat';
 
   let formEl = null;
@@ -78,16 +79,18 @@
   <main>
     <div class="chat-message__container">
       {#each thread as { type, text }, i}
-        <div class={`chat-message ${type}`}>
+        <div in:fly={{ y: 12, duration: 450 }} class={`chat-message ${type}`}>
           <p>
             {text}
           </p>
         </div>
       {/each}
+      {#if loading}
+        <div in:fly={{ y: 12, duration: 450 }} class="chat-message answer">
+          let me think about that...
+        </div>
+      {/if}
     </div>
-    {#if loading}
-      <div class="chat-message answer">let me think about that...</div>
-    {/if}
   </main>
 
   <section class="chatform">
