@@ -10,7 +10,7 @@
   {/if}
 
   <div class="chat-message__container">
-    {#each $thread as { type, text }, i}
+    {#each $thread as { type, text, sources }, i}
       <div
         in:fly={{
           y: 12,
@@ -22,6 +22,11 @@
         <p>
           {text}
         </p>
+        {#if sources}
+          <aside class="source">
+            <p>source: {sources}</p>
+          </aside>
+        {/if}
       </div>
     {/each}
     {#if $threadLoading}
@@ -68,6 +73,14 @@
 
     & p {
       margin: 0px;
+    }
+
+    & aside.source {
+      margin-top: var(--size-2);
+      padding-top: var(--size-2);
+      border-top: 1px solid var(--acc-4);
+      font-style: italic;
+      color: var(--ink-4);
     }
 
     &.question {

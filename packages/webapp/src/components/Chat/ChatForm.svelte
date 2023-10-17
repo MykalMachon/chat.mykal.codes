@@ -60,7 +60,8 @@
 
       const newResponseMessage = {
         type: 'answer',
-        text: `${data.answer} ${data?.sources || 'no sources for this data'}`,
+        text: `${data.answer}`,
+        sources: data?.sources || 'No valid sources found...',
       };
 
       thread.update((t) => [...t, newResponseMessage]);
