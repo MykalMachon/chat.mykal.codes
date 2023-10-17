@@ -15,7 +15,7 @@ def get_home():
     model = current_app.config['MODEL']
     response = model({"question": question})
     answer = response['answer']
-    sources = response['sources']
+    sources = response.get('metadata').get('source')
 
     # return response
     return {"answer": answer, "sources": sources}, 200

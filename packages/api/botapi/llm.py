@@ -1,4 +1,5 @@
 from pathlib import Path
+from os import getenv
 from langchain.text_splitter import CharacterTextSplitter
 import faiss
 from langchain.chat_models import ChatOpenAI
@@ -20,6 +21,7 @@ You are to do this while being kind and with a great attitude.
 # https://python.langchain.com/docs/use_cases/chatbots#chat-retrieval
 
 MODEL_FOLDER = Path("/srv/chat")
+ALWAYS_REBUILD_MODEL = True if getenv('ALWAYS_REBUILD_MODEL') is not None else False
 
 
 def get_model():
@@ -27,19 +29,22 @@ def get_model():
     print("getting model...")
     # check if /srv/chat folder exists, make new folder if not
     if not MODEL_FOLDER.exists():
-        print("could not find model folder, creating new folder...")
+        print("could not find model folder")
+        print("creating new folder...")
         MODEL_FOLDER.mkdir()
 
     # check if model file store.index and faiss_store.pkl exists
-    if (
+    if ALWAYS_REBUILD_MODEL or (
         not Path(f"{MODEL_FOLDER}/docs.index").exists()
         or not Path(f"{MODEL_FOLDER}/faiss_store.pkl").exists()
     ):
-        print("could not find model, creating new model...")
+        print("could not find model OR ALWAYS_REBUILD_MODEL environment variable is set")
+        print("creating new model now...")
         ingest_data_into_model()
         return load_existing_model()
     else:
-        print("found model on disk, loading existing model...")
+        print("found model on disk")
+        print("loading existing model...")
         return load_existing_model()
 
 
@@ -60,14 +65,14 @@ def load_existing_model():
 
 def ingest_data_into_model():
     """Ingests data from the main feed and loads it into the model"""
-    json_posts = requests.get("https://mykal.codes/feeds/main.json").json()
+    json_posts = requests.get("https://mykal.codes/feeds/posts.json").json()
 
     data = []
     sources = []
 
     for post in json_posts:
-        data.append(post["body"])
-        sources.append(f"https://mykal.codes/{post['collection']}/{post['slug']}")
+        data.append(post["content"]["md"])
+        sources.append(post["url"])
 
     # split data into chunks
     splitter = CharacterTextSplitter(chunk_size=1500, separator="\n")
@@ -86,6 +91,7 @@ def ingest_data_into_model():
 
 
 if __name__ == "__main__":
+    print(f"should rebuild model?: {ALWAYS_REBUILD_MODEL}")
     model = get_model()
     result = model({"question": "What do you know about Coffee?"})
     print(result)
