@@ -89,6 +89,8 @@
     <button
       class="icon"
       type="submit"
+      aria-label="Ask question"
+      title="Ask question"
       disabled={currQuestion.length <= 0 || $threadLoading}
     >
       <IoMdSend />
