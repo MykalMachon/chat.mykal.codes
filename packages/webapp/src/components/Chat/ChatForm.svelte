@@ -32,6 +32,11 @@
     e.preventDefault();
     threadLoading.set(true);
 
+    // optional analytics
+    if (umami) {
+      umami.track('Question asked');
+    }
+
     const newQuestion = {
       type: 'question',
       text: currQuestion,
@@ -59,6 +64,10 @@
       };
 
       thread.update((t) => [...t, newResponseMessage]);
+
+      if (umami) {
+        umami.track('Question answered');
+      }
     } catch (err) {
       console.log('error', err);
       const errChatMessage = {
@@ -66,6 +75,9 @@
         text: `something went wrong when asking your question: ${err}`,
       };
       thread.update((t) => [...t, errChatMessage]);
+      if (umami) {
+        umami.track('Question error');
+      }
     }
     currQuestion = '';
     threadLoading.set(false);
