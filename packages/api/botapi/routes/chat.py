@@ -1,4 +1,5 @@
 from flask import Blueprint, request, current_app
+from botapi.llm import context
 
 chat = Blueprint('chat', __name__, url_prefix='/api/chat')
 
@@ -13,7 +14,7 @@ def get_home():
 
     # get model from app context
     model = current_app.config['MODEL']
-    response = model({"question": question})
+    response = model({"question": f"{context} {question}"})
     answer = response['answer']
     sources = response['sources']
 
