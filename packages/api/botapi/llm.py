@@ -56,7 +56,7 @@ def load_existing_model():
 
     store.index = index
     chain = RetrievalQAWithSourcesChain.from_chain_type(
-        llm=ChatOpenAI(temperature=0, model='gpt-3.5-turbo'),
+        llm=ChatOpenAI(temperature=0, model='gpt-4o'),
         return_source_documents=True,
         retriever=store.as_retriever(),
     )
