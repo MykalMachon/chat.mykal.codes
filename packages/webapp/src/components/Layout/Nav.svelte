@@ -15,7 +15,7 @@
             x: -12,
             duration: 450,
           }}
-          href="https://mykal.codes/garden/"
+          href="https://mykal.codes/posts/"
           title="view source content"
         >
           <IoIosJournal />
