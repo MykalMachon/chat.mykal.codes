@@ -7,7 +7,7 @@
   },
   "deploy": {
     "startCommand": "npm run start",
-    "sleepApplication": true,
+    "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE"
   }
 }
