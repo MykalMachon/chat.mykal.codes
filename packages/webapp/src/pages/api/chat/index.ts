@@ -29,8 +29,8 @@ export const GET: APIRoute = async ({ url, request }) => {
     return new Response('the api is improperly configured. See server logs.', { status: 500 });
   }
 
-  console.log(`q: ${q}`);
-  console.log(`threadId: ${threadId}`);
+  // console.log(`q: ${q}`);
+  // console.log(`threadId: ${threadId}`);
 
   try {
     const data: LangbaseDataType = {

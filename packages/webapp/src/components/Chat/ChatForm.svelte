@@ -74,7 +74,6 @@
           break;
         }
         const chunk = decoder.decode(value);
-        console.log(`chunk: ${chunk}`);
         const dataPortions = chunk.split('data:');
         for(let i = 0; i < dataPortions.length; i++){
           const parseable = dataPortions[i];
