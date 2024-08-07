@@ -1,11 +1,13 @@
 <script>
   import IoMdSend from 'svelte-icons/io/IoMdSend.svelte';
-  import { thread, threadLoading } from '../../utils/stores';
+  import { newMessageStream, thread, threadLoading } from '../../utils/stores';
 
   import { onDestroy } from 'svelte';
+    import { parse } from 'svelte/compiler';
 
   let formEl = null;
   let currQuestion = '';
+  let threadId;
 
   const API_BASE = '/api/chat';
 
@@ -31,6 +33,7 @@
   const submitQuestionForm = async (e) => {
     e.preventDefault();
     threadLoading.set(true);
+    newMessageStream.set(''); // clear the new message stream
 
     // optional analytics
     if (umami) {
@@ -54,14 +57,45 @@
 
       // call the API
       const res = await fetch(`${API_BASE}?${params.toString()}`);
-      const data = await res.json();
+      if (res.status !== 200) throw new Error(res.statusText);
 
-      if (res.status !== 200) throw new Error(data.message);
+      // set the threadId 
+      threadId = res.headers.get('lb-thread-id');
+
+      // streaming
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+
+      let message = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        const chunk = decoder.decode(value);
+        console.log(`chunk: ${chunk}`);
+        const dataPortions = chunk.split('data:');
+        for(let i = 0; i < dataPortions.length; i++){
+          const parseable = dataPortions[i];
+          if (parseable.includes('[DONE]')){
+            break;
+          }
+          if (parseable.trim() === '' || parseable.length <= 1) {
+            continue;
+          }
+          const data = JSON.parse(parseable);
+          if (data.choices[0].delta.content) {
+            message += data.choices[0].delta.content;
+            newMessageStream.update((m) => m + data.choices[0].delta.content);
+          }
+        }
+      }
 
       const newResponseMessage = {
         type: 'answer',
-        text: `${data.answer}`,
-        sources: data?.sources || 'No valid sources found...',
+        text: message,
+        sources: 'tbd',
       };
 
       thread.update((t) => [...t, newResponseMessage]);
@@ -98,6 +132,11 @@
       name="q"
       placeholder="what do you think about docker?"
       bind:value={currQuestion}
+    />
+    <input 
+      type="hidden" 
+      name="threadId" 
+      bind:value={threadId} 
     />
     <button
       class="icon"
