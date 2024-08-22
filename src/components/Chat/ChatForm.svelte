@@ -3,7 +3,6 @@
   import { newMessageStream, thread, threadLoading } from '../../utils/stores';
 
   import { onDestroy } from 'svelte';
-    import { parse } from 'svelte/compiler';
 
   let formEl = null;
   let currQuestion = '';
@@ -45,8 +44,8 @@
       text: currQuestion,
     };
     thread.update((t) => [...t, newQuestion]);
-
     currQuestion = '';
+
     try {
       // get data from form as object
       const form = new FormData(e.target);
@@ -103,7 +102,6 @@
         umami.track('Question answered');
       }
     } catch (err) {
-      console.log('error', err);
       const errChatMessage = {
         type: 'error',
         text: `something went wrong when asking your question: ${err}`,
