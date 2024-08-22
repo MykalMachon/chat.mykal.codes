@@ -22,7 +22,7 @@
         </a>
       {/if}
     </div>
-    <div class="nav__container__item"><h1>Mykal.ai</h1></div>
+    <div class="nav__container__item"><h1>chat.mykal.codes</h1></div>
     <div class="nav__container__item icon">
       {#if $thread.length > 0}
         <a
