@@ -3,7 +3,6 @@
   "build": {
     "builder": "NIXPACKS",
     "buildCommand": "npm run build",
-    "watchPatterns": ["/packages/webapp/**"]
   },
   "deploy": {
     "startCommand": "npm run start",
