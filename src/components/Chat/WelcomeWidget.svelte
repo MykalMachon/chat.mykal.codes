@@ -5,16 +5,12 @@
 <article out:fly={{ y: -12, duration: 225 }}>
   <h2>What is this?</h2>
   <p>
-    This is an AI chat bot trained on my blog, 
-    <a href="https://mykal.codes/">mykal.codes</a>.  
-    This allows you to effectively "chat" with the content of my blog. 
-    <i>Which I think is pretty sweet.</i>
+    This was an RAG-powered chatbot using posts from my blog. 
+    It initially used Langchain as a backend. I later replaced Langchain with <a href="https://langbase.com/">Langbase</a>.
   </p>
   <p>
-    The end-goal would of this project be a chatbot that could speak
-    semi-intelligently about my interests. You can already ask it for my
-    thoughts on docker, or how to make an aeropress latte; It should respond
-    with a summary and links to my blog for more info.
+    I shut this down on <time datetime="2024-12-20">December 20th, 2024</time> as I wasn't keeping up with it.
+    Ideally I'll come back and update this to a modern RAG setup sometime soon. 
   </p>
 
   <h2>Other links</h2>

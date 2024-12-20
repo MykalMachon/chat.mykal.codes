@@ -7,7 +7,6 @@
 <div class="site-container">
   <Nav />
   <ChatThread />
-  <ChatForm />
 </div>
 
 <style>
